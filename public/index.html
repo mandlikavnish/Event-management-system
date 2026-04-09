@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventMaster Pro | Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+        #sidebar { width: 260px; height: 100vh; position: fixed; background: #0f172a; color: white; z-index: 1000; overflow-y: auto; }
+        .nav-link { color: #94a3b8; padding: 12px 20px; font-weight: 500; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: white; background: rgba(255,255,255,0.05); border-left: 4px solid #3b82f6; }
+        .sidebar-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 15px 20px 5px; }
+        #main-content { margin-left: 260px; padding: 30px; }
+        .section-pane { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .section-pane.active { display: block; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .form-control { background-color: #f8fafc; }
+        .form-control:focus { box-shadow: none; border-color: #3b82f6; }
+        .table th { font-size: 0.85rem; text-transform: uppercase; color: #64748b; font-weight: 600; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <div class="p-4 text-center border-bottom border-secondary mb-3">
+        <h4 class="fw-bold m-0"><i class="fas fa-calendar-check text-primary me-2"></i>EventMaster</h4>
+    </div>
+    <div class="sidebar-heading">People & Groups</div>
+    <a href="#" class="nav-link active" onclick="showSection('student-sec')"><i class="fas fa-user-graduate w-20 me-3"></i>Students</a>
+    <a href="#" class="nav-link" onclick="showSection('faculty-sec')"><i class="fas fa-chalkboard-teacher w-20 me-3"></i>Faculty</a>
+    <a href="#" class="nav-link" onclick="showSection('club-sec')"><i class="fas fa-users w-20 me-3"></i>Clubs</a>
+    
+    <div class="sidebar-heading mt-2">Events & Logistics</div>
+    <a href="#" class="nav-link" onclick="showSection('event-sec')"><i class="fas fa-star w-20 me-3"></i>Events</a>
+    <a href="#" class="nav-link" onclick="showSection('venue-sec')"><i class="fas fa-building w-20 me-3"></i>Venues</a>
+    <a href="#" class="nav-link" onclick="showSection('schedule-sec')"><i class="fas fa-clock w-20 me-3"></i>Schedules</a>
+    
+    <div class="sidebar-heading mt-2">Admin & Finance</div>
+    <a href="#" class="nav-link" onclick="showSection('reg-sec')"><i class="fas fa-id-card w-20 me-3"></i>Registrations</a>
+    <a href="#" class="nav-link" onclick="showSection('pay-sec')"><i class="fas fa-wallet w-20 me-3"></i>Payments</a>
+    <a href="#" class="nav-link" onclick="showSection('attend-sec')"><i class="fas fa-clipboard-user w-20 me-3"></i>Attendance</a>
+    <a href="#" class="nav-link" onclick="showSection('cert-sec')"><i class="fas fa-certificate w-20 me-3"></i>Certificates</a>
+</div>
+
+<div id="main-content">
+
+    <div id="student-sec" class="section-pane active">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Students</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getStudent()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addStudent()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="sid" class="form-control" placeholder="Student ID"></div>
+                <div class="col-md-3"><input id="sname" class="form-control" placeholder="Name"></div>
+                <div class="col-md-3"><input id="semail" class="form-control" placeholder="Email"></div>
+                <div class="col-md-2"><input id="sphone" class="form-control" placeholder="Phone"></div>
+                <div class="col-md-1"><input id="sdept" class="form-control" placeholder="Dept"></div>
+                <div class="col-md-1"><input id="syear" class="form-control" placeholder="Year"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateStudent()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="output" class="table-responsive"></div></div>
+    </div>
+
+    <div id="faculty-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Faculty</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getFaculty()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addFaculty()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="fid" class="form-control" placeholder="Faculty ID"></div>
+                <div class="col-md-3"><input id="fname" class="form-control" placeholder="Name"></div>
+                <div class="col-md-3"><input id="femail" class="form-control" placeholder="Email"></div>
+                <div class="col-md-2"><input id="fphone" class="form-control" placeholder="Phone"></div>
+                <div class="col-md-2"><input id="fdept" class="form-control" placeholder="Dept"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateFaculty()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="facultyOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="club-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Clubs</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getClub()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addClub()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="cid" class="form-control" placeholder="Club ID"></div>
+                <div class="col-md-3"><input id="cname" class="form-control" placeholder="Club Name"></div>
+                <div class="col-md-3"><input id="ctype" class="form-control" placeholder="Type"></div>
+                <div class="col-md-2"><input id="cdate" type="date" class="form-control" title="Created Date"></div>
+                <div class="col-md-2"><input id="cfid" class="form-control" placeholder="Faculty ID"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateClub()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="clubOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="event-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Events</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getEvent()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addEvent()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="eid" class="form-control" placeholder="Event ID"></div>
+                <div class="col-md-4"><input id="etitle" class="form-control" placeholder="Title"></div>
+                <div class="col-md-3"><input id="etype" class="form-control" placeholder="Type"></div>
+                <div class="col-md-3"><input id="eclub" class="form-control" placeholder="Club ID (FK)"></div>
+                
+                <div class="col-md-3"><input id="edate" type="date" class="form-control"></div>
+                <div class="col-md-2"><input id="stime" type="time" class="form-control"></div>
+                <div class="col-md-2"><input id="etime" type="time" class="form-control"></div>
+                <div class="col-md-2"><input id="efee" class="form-control" placeholder="Fee ($)"></div>
+                <div class="col-md-3"><input id="estatus" class="form-control" placeholder="Status (e.g. Upcoming)"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateEvent()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="eventOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="venue-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Venues</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getVenue()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addVenue()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="vid" class="form-control" placeholder="Venue ID"></div>
+                <div class="col-md-4"><input id="vname" class="form-control" placeholder="Venue Name"></div>
+                <div class="col-md-4"><input id="vloc" class="form-control" placeholder="Location"></div>
+                <div class="col-md-2"><input id="vcap" class="form-control" placeholder="Capacity"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateVenue()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="venueOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="schedule-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Event Schedules</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getSchedule()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addSchedule()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="sid2" class="form-control" placeholder="Schedule ID"></div>
+                <div class="col-md-2"><input id="seid" class="form-control" placeholder="Event ID"></div>
+                <div class="col-md-2"><input id="svid" class="form-control" placeholder="Venue ID"></div>
+                <div class="col-md-2"><input id="sdate" type="date" class="form-control"></div>
+                <div class="col-md-2"><input id="sstime" type="time" class="form-control"></div>
+                <div class="col-md-2"><input id="setime" type="time" class="form-control"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateSchedule()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="scheduleOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="reg-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Registrations</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getRegistration()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addRegistration()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="rid" class="form-control" placeholder="Reg ID"></div>
+                <div class="col-md-3"><input id="rstudent" class="form-control" placeholder="Student ID"></div>
+                <div class="col-md-3"><input id="revent" class="form-control" placeholder="Event ID"></div>
+                <div class="col-md-2"><input id="rdate" type="date" class="form-control"></div>
+                <div class="col-md-2"><input id="rstatus" class="form-control" placeholder="Status"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateRegistration()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="registrationOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="pay-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Payments</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getPayment()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addPayment()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-2"><input id="pid" class="form-control" placeholder="Payment ID"></div>
+                <div class="col-md-2"><input id="preg" class="form-control" placeholder="Reg ID"></div>
+                <div class="col-md-2"><input id="pamount" class="form-control" placeholder="Amount"></div>
+                <div class="col-md-2"><input id="pmode" class="form-control" placeholder="Mode (Card/Cash)"></div>
+                <div class="col-md-2"><input id="pdate" type="date" class="form-control"></div>
+                <div class="col-md-2"><input id="pstatus" class="form-control" placeholder="Status"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updatePayment()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="paymentOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="attend-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Attendance</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getAttendance()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addAttendance()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-3"><input id="aid" class="form-control" placeholder="Attendance ID"></div>
+                <div class="col-md-3"><input id="areg" class="form-control" placeholder="Reg ID"></div>
+                <div class="col-md-6"><input id="astatus" class="form-control" placeholder="Present / Absent"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateAttendance()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="attendanceOutput" class="table-responsive"></div></div>
+    </div>
+
+    <div id="cert-sec" class="section-pane">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Certificates</h2>
+            <div>
+                <button class="btn btn-success me-2" onclick="getCertificate()"><i class="fas fa-sync-alt me-2"></i>Load Data</button>
+                <button class="btn btn-primary" onclick="addCertificate()"><i class="fas fa-plus me-2"></i>Add</button>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row g-3">
+                <div class="col-md-3"><input id="cid2" class="form-control" placeholder="Certificate ID"></div>
+                <div class="col-md-3"><input id="creg" class="form-control" placeholder="Reg ID"></div>
+                <div class="col-md-3"><input id="cdate2" type="date" class="form-control"></div>
+                <div class="col-md-3"><input id="cstatus2" class="form-control" placeholder="Status"></div>
+            </div>
+            <div class="mt-3"><button class="btn btn-outline-info btn-sm" onclick="updateCertificate()">Save Updates</button></div>
+        </div>
+        <div class="card p-0"><div id="certificateOutput" class="table-responsive"></div></div>
+    </div>
+
+</div>
+
+<script>
+    function showSection(sectionId) {
+        document.querySelectorAll('.section-pane').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+<script src="script.js"></script>
+
+</body>
+</html>
